@@ -46,6 +46,9 @@ namespace AlgoritmoMochila.Entidade
 
         public int QuantidadeMaximaMochila { get; set; }
         public Double Coeficiente { get; set; }
+        public double FuncaoObjetiva => this.Beneficio * this.Quantidade;
+
+
 
         internal Objeto CalcularQuantidadeMaximaMochila(Mochila mochila)
         {

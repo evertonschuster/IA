@@ -18,13 +18,12 @@ namespace AlgoritmoMochila
 
         private List<Objeto> Objetos { get; set; }
         private Mochila Mochila { get; set; }
-        private Mochila MochilaPai { get; set; }
-        private Mochila MochilaMae { get; set; }
+        private List<Mochila> MochilaPopulacao { get; set; }
         private GerarMochila gerarMochila;
 
         public Program()
         {
-            this.Mochila = new Mochila(30);
+            this.Mochila = new Mochila(25);
 
 
             this.Objetos = new List<Objeto>();
@@ -39,7 +38,7 @@ namespace AlgoritmoMochila
 
 
             this.gerarMochila = new GerarMochila(this.Objetos, this.Mochila);
-
+            this.MochilaPopulacao = new List<Mochila>();
         }
 
 
@@ -47,12 +46,26 @@ namespace AlgoritmoMochila
 
         public void Inicializa()
         {
-            this.MochilaPai = this.gerarMochila.GerarPopulacaoInicial();
-            MochilaPai.MostrarMochila();
+            Mochila filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
             Console.WriteLine("===================================================\n");
 
-            this.MochilaMae = this.gerarMochila.GerarPopulacaoInicial();
-            MochilaMae.MostrarMochila();
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
         }
 
     }

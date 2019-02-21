@@ -53,10 +53,11 @@ namespace AlgoritmoMochila.Entidade
         public void MostrarMochila()
         {
             Console.WriteLine($"Capacidade da Mochila: {this.PesoMochila}/{this.Capacidade}");
+            Console.WriteLine($"Custo Beneficio. {this.CustoBeneficio() }");
             Console.WriteLine("----------------------------------------------------------");
             foreach (var item in this.Objetos.OrderBy(o => o.Id))
             {
-                Console.WriteLine($"Item: {item.Id} Quantidade: {item.Quantidade} Peso: {item.Peso} Total: {item.Quantidade * item.Peso}");
+                Console.WriteLine($"Item: {item.Id} Quantidade: {item.Quantidade} Peso: {item.Peso} Total: {item.Quantidade * item.Peso} Funca: {item.FuncaoObjetiva }");
             }
         }
 
@@ -88,6 +89,11 @@ namespace AlgoritmoMochila.Entidade
             }
 
             this.Objetos.Add(obj);
+        }
+
+        public double  CustoBeneficio()
+        {
+            return this.Objetos.Sum(o => o.FuncaoObjetiva ) * this.Objetos.Select(o => o.Quantidade > 0).Count();
         }
 
         /// <summary>
