@@ -10,7 +10,6 @@ namespace AlgoritmoMochila
     {
         private List<Objeto> Objetos { get; }
         private Mochila Mochila { get; set; }
-        private List<Objeto> objetoAdicionados;
         private Random r = new Random();
 
 
@@ -23,32 +22,28 @@ namespace AlgoritmoMochila
         public Mochila GerarPopulacaoInicial()
         {
             Mochila novaMochila = this.Mochila.Clone();
-            objetoAdicionados = new List<Objeto>();
+            List<Objeto> objetoAdicionados = novaMochila.Objetos;
             //sorteia um objeto para adicionar na mochila
 
             while (!novaMochila.IsCheia)
             {
+
                 //procura um objeto ainda nao adicionado
                 Objeto novoObjeto = this.SortearObjeto();
-
-                var tste = objetoAdicionados.Find(o => o.Id == novoObjeto.Id);
 
                 while (objetoAdicionados.Find(o => o.Id == novoObjeto.Id) != null)
                 {
                     novoObjeto = this.SortearObjeto();
                 }
-                objetoAdicionados.Add(novoObjeto);
 
+                //gero o Objeto para adicionar na mochila
+                novoObjeto = this.GerarItem(novoObjeto);
                 try
                 {
-                    novoObjeto = this.GerarItem(novoObjeto);
                     novaMochila.AdicionarItemMochila(novoObjeto);
-                }
-                catch (CapacidadeMochilaException ex)
+                }catch(CapacidadeMochilaException ex)
                 {
-                    novoObjeto = this.GerarItem(novoObjeto, ex.CapacidadeLivre);
-                    novaMochila.AdicionarItemMochila(novoObjeto);
-
+                    return this.GerarPopulacaoInicial();
                 }
 
 
@@ -74,34 +69,18 @@ namespace AlgoritmoMochila
             return Objetos[index];
         }
 
-        private Objeto GerarItem(Objeto obj, int limite = -1)
+        private Objeto GerarItem(Objeto obj)
         {
-            int quantiadde;
-            if (limite == 0)
+            int probabilidade = r.Next(Convert.ToInt32(101) );
+            int quantidade = 0;
+            if (probabilidade >= 50)
             {
-                quantiadde = 0;
-            }
-            else if (limite == -1)
-            {
-                if (this.objetoAdicionados.Count <= (this.Objetos.Count / 3)* 2)
-                {
-                    quantiadde = r.Next(1,obj.QuantidadeMaximaMochila / 2);
-                }
-                else
-                {
-                    quantiadde = r.Next(obj.QuantidadeMaximaMochila + 1);
-                }
-            }
-            else
-            {
-                quantiadde = r.Next(limite);
-
+                quantidade = 1;
             }
 
 
-            obj = new Objeto(obj, quantiadde);
-
-            return obj;
+            Objeto objeto = new Objeto(obj, quantidade);
+            return objeto;
         }
 
     }

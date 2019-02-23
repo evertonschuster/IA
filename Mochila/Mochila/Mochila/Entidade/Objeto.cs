@@ -5,38 +5,40 @@ using System.Threading;
 
 namespace AlgoritmoMochila.Entidade
 {
-    internal class Objeto
+    internal class Objeto : IComparable
     {
-
+        private const int QUANTIDADE_MAXIMA = 1;
 
         public Objeto(long id, int beneficio, int peso)
         {
+            this.Quantidade = 0;
             this.Id = id;
             this.Beneficio = beneficio;
             this.Peso = peso;
-
-            this.Coeficiente = beneficio / peso;
-            this.Quantidade = 0;
         }
 
-        public Objeto(Objeto obj, int quantiadde)
+        public Objeto(Objeto obj, int quantidade)
         {
+            if (quantidade > QUANTIDADE_MAXIMA)
+            {
+                throw new ArgumentException("Quantidade maxima atingida");
+            }
+            this.Quantidade = quantidade;
             this.Id = obj.Id;
             this.Beneficio = obj.Beneficio;
             this.Peso = obj.Peso;
-            this.Quantidade = quantiadde;
-
-            this.Coeficiente = obj.Beneficio / obj.Peso;
         }
 
         public Objeto(long id, int beneficio, int peso, int quantidade)
         {
+            if (quantidade > QUANTIDADE_MAXIMA)
+            {
+                throw new ArgumentException("Quantidade maxima atingida");
+            }
+            this.Quantidade = quantidade;
             this.Id = id;
             this.Beneficio = beneficio;
             this.Peso = peso;
-            this.Quantidade = quantidade;
-
-            this.Coeficiente = beneficio / peso;
         }
 
         public long Id { get; }
@@ -45,16 +47,33 @@ namespace AlgoritmoMochila.Entidade
         public int Quantidade { get; }
 
         public int QuantidadeMaximaMochila { get; set; }
-        public Double Coeficiente { get; set; }
-        public double FuncaoObjetiva => this.Beneficio * this.Quantidade;
+        public Double FuncaoObjetiva => (((Double)this.Beneficio / (Double)this.Peso)) * 100;
 
-
-
-        internal Objeto CalcularQuantidadeMaximaMochila(Mochila mochila)
+        // Default comparer for Part type.
+        public int CompareTo(object obj)
         {
-            this.QuantidadeMaximaMochila = mochila.Capacidade / this.Peso;
+            var item = obj as Objeto;
+            // A null value means that this object is greater.
+            if (item == null)
+                return 1;
 
-            return this;
+            else
+            {
+                if (this.Id > item.Id)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
         }
+
+        public Objeto Clone()
+        {
+            return new Objeto(this, this.Quantidade);
+        }
+
     }
 }

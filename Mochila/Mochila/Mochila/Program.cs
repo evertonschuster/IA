@@ -1,4 +1,5 @@
 ﻿using AlgoritmoMochila.Entidade;
+using AlgoritmoMochila.Genetica;
 using System;
 using System.Collections.Generic;
 
@@ -8,11 +9,20 @@ namespace AlgoritmoMochila
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Iniciando geracao de Mochilas");
+            try
+            {
 
-            Program p = new Program();
-            p.Inicializa();
+                Console.WriteLine("Iniciando geracao de Mochilas");
 
+                Program p = new Program();
+                p.Inicializa();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
             Console.ReadKey();
         }
 
@@ -27,14 +37,14 @@ namespace AlgoritmoMochila
 
 
             this.Objetos = new List<Objeto>();
-            this.Objetos.Add(new Objeto(1, 3, 5).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(2, 3, 4).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(3, 2, 7).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(4, 4, 8).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(5, 2, 4).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(6, 3, 4).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(7, 5, 6).CalcularQuantidadeMaximaMochila(this.Mochila));
-            this.Objetos.Add(new Objeto(8, 2, 8).CalcularQuantidadeMaximaMochila(this.Mochila));
+            this.Objetos.Add(new Objeto(1, 3, 5));
+            this.Objetos.Add(new Objeto(2, 3, 4));
+            this.Objetos.Add(new Objeto(3, 2, 7));
+            this.Objetos.Add(new Objeto(4, 4, 8));
+            this.Objetos.Add(new Objeto(5, 2, 4));
+            this.Objetos.Add(new Objeto(6, 3, 4));
+            this.Objetos.Add(new Objeto(7, 5, 6));
+            this.Objetos.Add(new Objeto(8, 2, 8));
 
 
             this.gerarMochila = new GerarMochila(this.Objetos, this.Mochila);
@@ -50,6 +60,12 @@ namespace AlgoritmoMochila
             this.MochilaPopulacao.Add(filho);
             filho.MostrarMochila();
             Console.WriteLine("===================================================\n");
+            var filhoB = filho;
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("==================================================\n");
 
             filho = this.gerarMochila.GerarPopulacaoInicial();
             this.MochilaPopulacao.Add(filho);
@@ -60,12 +76,20 @@ namespace AlgoritmoMochila
             this.MochilaPopulacao.Add(filho);
             filho.MostrarMochila();
             Console.WriteLine("===================================================\n");
+            Console.WriteLine("Iniciar");
+            Console.ReadLine();
 
-            filho = this.gerarMochila.GerarPopulacaoInicial();
-            this.MochilaPopulacao.Add(filho);
-            filho.MostrarMochila();
+
+            var geracoes = new Geracao(20, 100, 100);
+            geracoes.AdicionarMochila(this.MochilaPopulacao);
+            geracoes.EvoluirPopulacao();
+
+
             Console.WriteLine("===================================================\n");
+            Console.WriteLine("Finalizou");
 
+            geracoes.MelhorMochila.MostrarMochila();
+            Console.WriteLine($"Geracao da Mochila : {geracoes.GeracaoMelhorMochila }");
         }
 
     }

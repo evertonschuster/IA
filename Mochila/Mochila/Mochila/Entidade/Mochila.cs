@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace AlgoritmoMochila.Entidade
@@ -12,6 +11,8 @@ namespace AlgoritmoMochila.Entidade
         #region Geracao de ID
         int _field1;
         private static int geradorId = 0;
+        private List<Objeto> _objetos;
+
         private int getId()
         {
             int id = 0;
@@ -39,9 +40,20 @@ namespace AlgoritmoMochila.Entidade
         public int Capacidade { get; }
 
         public Boolean IsCheia => this.PesoMochila >= this.Capacidade;
-        public int PesoMochila => this.Objetos.Sum(o => o.Quantidade * o.Peso);
+        public int PesoMochila => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.Peso);
+        public int BeneficioMochila => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.Beneficio);
+        public Double FuncaoObjetiva => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.FuncaoObjetiva);
 
-        public List<Objeto> Objetos { get; protected set; }
+        public List<Objeto> Objetos
+        {
+            get
+            {
+                _objetos.Sort();
+               
+                return _objetos;
+            }
+            protected set => _objetos = value;
+        }
 
         public Mochila(int capacidade)
         {
@@ -53,12 +65,12 @@ namespace AlgoritmoMochila.Entidade
         public void MostrarMochila()
         {
             Console.WriteLine($"Capacidade da Mochila: {this.PesoMochila}/{this.Capacidade}");
-            Console.WriteLine($"Custo Beneficio. {this.CustoBeneficio() }");
+            Console.WriteLine($"Funcao(Qualidade). {this.FuncaoObjetiva }");
             Console.WriteLine("----------------------------------------------------------");
-            foreach (var item in this.Objetos.OrderBy(o => o.Id))
-            {
-                Console.WriteLine($"Item: {item.Id} Quantidade: {item.Quantidade} Peso: {item.Peso} Total: {item.Quantidade * item.Peso} Funca: {item.FuncaoObjetiva }");
-            }
+            //foreach (var item in this.Objetos.OrderBy(o => o.Id))
+            //{
+            //    Console.WriteLine($"Item: {item.Id} Quantidade: {item.Quantidade} Beneficio: {item.Beneficio} Peso: {item.Peso} Funca(Qualidade): {item.FuncaoObjetiva.ToString() }");
+            //}
         }
 
         /// <summary>
@@ -68,7 +80,7 @@ namespace AlgoritmoMochila.Entidade
         /// <param name="obj"></param>
         public void AdicionarItemMochila(Objeto obj)
         {
-            int contadorPeso = this.Objetos.Sum(o => o.Peso * o.Quantidade);
+            int contadorPeso = this.PesoMochila;
 
             //verefica se ainda possui lugar
             if (contadorPeso > this.Capacidade)
@@ -80,10 +92,10 @@ namespace AlgoritmoMochila.Entidade
 
 
             //Verefica se pode add
-            contadorPeso += obj.Peso * obj.Quantidade;
-            if (contadorPeso > this.Capacidade)
+            contadorPeso += obj.Peso;
+            if (contadorPeso > this.Capacidade && obj.Quantidade > 0)
             {
-                int espacoLivre = this.Capacidade - (contadorPeso - obj.Peso * obj.Quantidade);
+                int espacoLivre = this.Capacidade - (contadorPeso - obj.Peso);
                 int quantidadeLivre = (espacoLivre / obj.Peso) < 0 ? 0 : (espacoLivre / obj.Peso);
                 throw new CapacidadeMochilaException(espacoLivre <= 0, quantidadeLivre);
             }
@@ -91,9 +103,9 @@ namespace AlgoritmoMochila.Entidade
             this.Objetos.Add(obj);
         }
 
-        public double  CustoBeneficio()
+        public double Beneficio()
         {
-            return this.Objetos.Sum(o => o.FuncaoObjetiva ) * this.Objetos.Select(o => o.Quantidade > 0).Count();
+            return this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.Beneficio);
         }
 
         /// <summary>
