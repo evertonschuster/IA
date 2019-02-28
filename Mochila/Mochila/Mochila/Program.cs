@@ -23,13 +23,14 @@ namespace AlgoritmoMochila
                 Console.WriteLine(e.Message);
                 Console.WriteLine(e.StackTrace);
             }
-            Console.ReadKey();
+
         }
 
         private List<Objeto> Objetos { get; set; }
         private Mochila Mochila { get; set; }
         private List<Mochila> MochilaPopulacao { get; set; }
         private GerarMochila gerarMochila;
+        private Geracao Geracoes;
 
         public Program()
         {
@@ -49,6 +50,8 @@ namespace AlgoritmoMochila
 
             this.gerarMochila = new GerarMochila(this.Objetos, this.Mochila);
             this.MochilaPopulacao = new List<Mochila>();
+
+            this.Geracoes = new Geracao(20, 100, 100,10);
         }
 
 
@@ -71,6 +74,7 @@ namespace AlgoritmoMochila
             this.MochilaPopulacao.Add(filho);
             filho.MostrarMochila();
             Console.WriteLine("===================================================\n");
+             
 
             filho = this.gerarMochila.GerarPopulacaoInicial();
             this.MochilaPopulacao.Add(filho);
@@ -80,16 +84,16 @@ namespace AlgoritmoMochila
             Console.ReadLine();
 
 
-            var geracoes = new Geracao(20, 100, 100);
-            geracoes.AdicionarMochila(this.MochilaPopulacao);
-            geracoes.EvoluirPopulacao();
+            
+            this.Geracoes.AdicionarMochila(this.MochilaPopulacao);
+            this.Geracoes.EvoluirPopulacao();
 
 
             Console.WriteLine("===================================================\n");
             Console.WriteLine("Finalizou");
 
-            geracoes.MelhorMochila.MostrarMochila();
-            Console.WriteLine($"Geracao da Mochila : {geracoes.GeracaoMelhorMochila }");
+            this.Geracoes.MelhorMochila.MostrarMochila();
+            Console.WriteLine($"Geracao da Mochila : {this.Geracoes.GeracaoMelhorMochila }");
         }
 
     }

@@ -14,26 +14,25 @@ namespace AlgoritmoMochila.Genetica
         private int QuantidadeMaximaPopulacao = 0;
         private int QuantidadeMaximaGeracoes = 0;
         private int QuantidadeMaximaFiliacao = 0;
+        private int QuantidadeGeracaoSemMelhoria = 0;
         Crossover Crossover = new Crossover();
         Random r = new Random();
 
-        public Geracao(int quantidadeMaximaPopulacao, int quantidadeMaximaGeracoes, int quantidadeMaximaFiliacao)
+        public Geracao(int quantidadeMaximaPopulacao, int quantidadeMaximaGeracoes, int quantidadeMaximaFiliacao, int quantidadeGeracaoSemMelhoria)
         {
             this.QuantidadeMaximaPopulacao = quantidadeMaximaPopulacao;
             this.QuantidadeMaximaGeracoes = quantidadeMaximaGeracoes;
             this.QuantidadeMaximaFiliacao = quantidadeMaximaFiliacao;
+            this.QuantidadeGeracaoSemMelhoria = quantidadeGeracaoSemMelhoria;
         }
 
         public void AdicionarMochila(Mochila mochila)
         {
             this.Populacao.Add(mochila);
         }
-        public void AdicionarMochila(List<Mochila> ListMochila)
+        public void AdicionarMochila(List<Mochila> listMochila)
         {
-            foreach (var item in ListMochila)
-            {
-                this.AdicionarMochila(item);
-            }
+            listMochila.ForEach(m => this.AdicionarMochila(m));
         }
 
         public void EvoluirPopulacao()
@@ -50,6 +49,13 @@ namespace AlgoritmoMochila.Genetica
                 {
                     this.EliminarIndividuos(this.Populacao.Count - this.QuantidadeMaximaPopulacao);
                 }
+
+                //verefica quantas geracoes nao teve evolucao
+                if(this.GeracaoMelhorMochila + this.QuantidadeGeracaoSemMelhoria <= i)
+                {
+                    break;
+                }
+
             }
 
             this.MelhorMochila.MostrarMochila();
@@ -58,14 +64,13 @@ namespace AlgoritmoMochila.Genetica
         private void GerarGeracao()
         {
             int quantidadeFiliacao = r.Next(3, this.QuantidadeMaximaFiliacao);
-            List<Mochila> novaGeracao = new List<Mochila>();
+            //quantidadeFiliacao = this.Populacao.Count < quantidadeFiliacao ? this.Populacao.Count : quantidadeFiliacao;
+
+            List <Mochila> novaGeracao = new List<Mochila>();
 
             for (int i = 0; i < quantidadeFiliacao; i++)
             {
-                foreach (var item in GerarIndividuos())
-                {
-                    novaGeracao.Add(item);
-                }
+                this.GerarIndividuos().ForEach(o => novaGeracao.Add(o));
             }
 
             this.AdicionarMochila(novaGeracao);

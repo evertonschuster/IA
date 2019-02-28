@@ -75,5 +75,10 @@ namespace AlgoritmoMochila.Entidade
             return new Objeto(this, this.Quantidade);
         }
 
+        public void MostrarObjeto()
+        {
+            Console.WriteLine($"ID: {this.Id} Quantidade: {this.Quantidade} Beneficio: {this.Beneficio} Peso: {this.Peso} FuncaoObjetiva: {this.FuncaoObjetiva}");
+        }
     }
 }
+

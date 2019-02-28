@@ -49,7 +49,7 @@ namespace AlgoritmoMochila.Entidade
             get
             {
                 _objetos.Sort();
-               
+
                 return _objetos;
             }
             protected set => _objetos = value;
@@ -67,10 +67,8 @@ namespace AlgoritmoMochila.Entidade
             Console.WriteLine($"Capacidade da Mochila: {this.PesoMochila}/{this.Capacidade}");
             Console.WriteLine($"Funcao(Qualidade). {this.FuncaoObjetiva }");
             Console.WriteLine("----------------------------------------------------------");
-            //foreach (var item in this.Objetos.OrderBy(o => o.Id))
-            //{
-            //    Console.WriteLine($"Item: {item.Id} Quantidade: {item.Quantidade} Beneficio: {item.Beneficio} Peso: {item.Peso} Funca(Qualidade): {item.FuncaoObjetiva.ToString() }");
-            //}
+
+            this.Objetos.ForEach(o => o.MostrarObjeto());
         }
 
         /// <summary>
