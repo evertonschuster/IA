@@ -11,19 +11,21 @@ namespace AlgoritmoMochila.Genetica
         private List<Mochila> Populacao = new List<Mochila>();
         public Mochila MelhorMochila { get; private set; }
         public int GeracaoMelhorMochila{ get; private set; }
+        public object FilhosAlejados => this.Crossover.FilhosAlejado;
+
         private int QuantidadeMaximaPopulacao = 0;
         private int QuantidadeMaximaGeracoes = 0;
-        private int QuantidadeMaximaFiliacao = 0;
         private int QuantidadeGeracaoSemMelhoria = 0;
+        private int PorcentagemMultiplicacao = 0;
         Crossover Crossover = new Crossover();
         Random r = new Random();
 
-        public Geracao(int quantidadeMaximaPopulacao, int quantidadeMaximaGeracoes, int quantidadeMaximaFiliacao, int quantidadeGeracaoSemMelhoria)
+        public Geracao(int quantidadeMaximaPopulacao, int quantidadeMaximaGeracoes, int quantidadeGeracaoSemMelhoria, int porcentagemMultiplicacao)
         {
             this.QuantidadeMaximaPopulacao = quantidadeMaximaPopulacao;
             this.QuantidadeMaximaGeracoes = quantidadeMaximaGeracoes;
-            this.QuantidadeMaximaFiliacao = quantidadeMaximaFiliacao;
             this.QuantidadeGeracaoSemMelhoria = quantidadeGeracaoSemMelhoria;
+            this.PorcentagemMultiplicacao = porcentagemMultiplicacao;
         }
 
         public void AdicionarMochila(Mochila mochila)
@@ -63,10 +65,13 @@ namespace AlgoritmoMochila.Genetica
 
         private void GerarGeracao()
         {
-            int quantidadeFiliacao = r.Next(3, this.QuantidadeMaximaFiliacao);
+            //int quantidadeFiliacao = r.Next(3, this.QuantidadeMaximaFiliacao);
             //quantidadeFiliacao = this.Populacao.Count < quantidadeFiliacao ? this.Populacao.Count : quantidadeFiliacao;
 
-            List <Mochila> novaGeracao = new List<Mochila>();
+            //int quantidadeFiliacao = this.Populacao.Count * ((double)PorcentagemMultiplicacao / 100);
+            double quantidadeFiliacao = this.Populacao.Count * ((double)PorcentagemMultiplicacao / 100);
+
+            List<Mochila> novaGeracao = new List<Mochila>();
 
             for (int i = 0; i < quantidadeFiliacao; i++)
             {

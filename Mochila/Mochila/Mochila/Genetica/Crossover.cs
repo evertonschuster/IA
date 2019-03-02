@@ -14,6 +14,7 @@ namespace AlgoritmoMochila.Genetica
         private Random r = new Random();
 
         private int PROBABILIDADE_MUTANTE = 05;
+        public int FilhosAlejado { get; private set; }
 
         public Crossover(Mochila mochilaPai, Mochila mochilaMae)
         {
@@ -48,8 +49,14 @@ namespace AlgoritmoMochila.Genetica
             Mochila mochilaFilhaMae = GerarUmFilho(pontoCorteA, pontoCorteB, false);
 
             List<Mochila> filhos = new List<Mochila>();
-            filhos.Add(mochilaFilhaPai);
-            filhos.Add(mochilaFilhaMae);
+            if (mochilaFilhaPai != null)
+            {
+                filhos.Add(mochilaFilhaPai);
+            }
+            if (mochilaFilhaMae != null)
+            {
+                filhos.Add(mochilaFilhaMae);
+            }
 
             return filhos;
         }
@@ -95,27 +102,40 @@ namespace AlgoritmoMochila.Genetica
             Mochila mochilaFilha = new Mochila(this.MochilaMae.Capacidade);
 
             //se nao isPrimeiro, eu inverto os pais
-            try
-            {
-                for (int i = 0; i < this.MochilaPai.Objetos.Count; i++)
-                {
-                    //entre o ponto de corte, faz a troca de genes
-                    if (i >= pontoCorteA && i <= pontoCorteB)
-                    {
-                        mochilaFilha.AdicionarItemMochila(mochilaMae.Objetos[i].Clone());
-                    }
-                    else
-                    {
-                        mochilaFilha.AdicionarItemMochila(mochilaPai.Objetos[i].Clone());
-                    }
 
+            Objeto objeto;
+
+            for (int count = 0; count < this.MochilaPai.Objetos.Count; count++)
+            {
+                int i = r.Next(this.MochilaPai.Objetos.Count);
+
+                while(mochilaFilha.Objetos.Exists(o => o.Id == i + 1))
+                {
+                    i = r.Next(this.MochilaPai.Objetos.Count);
+                }
+
+                //entre o ponto de corte, faz a troca de genes
+                if (i >= pontoCorteA && i <= pontoCorteB)
+                {
+                    objeto = mochilaMae.Objetos[i].Clone();
+                }
+                else
+                {
+                    objeto = mochilaPai.Objetos[i].Clone();
+                }
+
+                try
+                {
+                    mochilaFilha.AdicionarItemMochila(objeto);
+                }
+                catch (CapacidadeMochilaException ex)
+                {
+                    this.FilhosAlejado++;
+                    objeto = new Objeto(objeto, 0);
+                    mochilaFilha.AdicionarItemMochila(objeto);
                 }
             }
-            catch (CapacidadeMochilaException ex)
-            {
-                var gerador = new GerarMochila(mochilaPai.Objetos, mochilaPai);
-                return gerador.GerarPopulacaoInicial();
-            }
+
 
             return this.VereficaMutante(mochilaFilha);
         }

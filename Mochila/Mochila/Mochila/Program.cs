@@ -3,6 +3,9 @@ using AlgoritmoMochila.Genetica;
 using System;
 using System.Collections.Generic;
 
+
+//quando gerar filho deficiente, muta ele, ou repara
+
 namespace AlgoritmoMochila
 {
     public class Program
@@ -47,11 +50,10 @@ namespace AlgoritmoMochila
             this.Objetos.Add(new Objeto(7, 5, 6));
             this.Objetos.Add(new Objeto(8, 2, 8));
 
-
             this.gerarMochila = new GerarMochila(this.Objetos, this.Mochila);
             this.MochilaPopulacao = new List<Mochila>();
 
-            this.Geracoes = new Geracao(20, 100, 100,10);
+            this.Geracoes = new Geracao(40, 1200, 30, 60);
         }
 
 
@@ -74,7 +76,22 @@ namespace AlgoritmoMochila
             this.MochilaPopulacao.Add(filho);
             filho.MostrarMochila();
             Console.WriteLine("===================================================\n");
-             
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
+            filho = this.gerarMochila.GerarPopulacaoInicial();
+            this.MochilaPopulacao.Add(filho);
+            filho.MostrarMochila();
+            Console.WriteLine("===================================================\n");
+
 
             filho = this.gerarMochila.GerarPopulacaoInicial();
             this.MochilaPopulacao.Add(filho);
@@ -94,6 +111,7 @@ namespace AlgoritmoMochila
 
             this.Geracoes.MelhorMochila.MostrarMochila();
             Console.WriteLine($"Geracao da Mochila : {this.Geracoes.GeracaoMelhorMochila }");
+            Console.WriteLine($"Filhos alejados: {this.Geracoes.FilhosAlejados}");
         }
 
     }
