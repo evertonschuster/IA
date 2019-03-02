@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteiroFormiga", "CarteiroFormiga\CarteiroFormiga.csproj", "{52C42689-8837-4480-9861-DC04C4CAF387}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52C42689-8837-4480-9861-DC04C4CAF387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C42689-8837-4480-9861-DC04C4CAF387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C42689-8837-4480-9861-DC04C4CAF387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C42689-8837-4480-9861-DC04C4CAF387}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3933442F-C0FC-43BB-8150-14F5817A7E2E}
+	EndGlobalSection
+EndGlobal
