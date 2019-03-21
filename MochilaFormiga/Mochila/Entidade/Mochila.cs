@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace AlgoritmoMochila.Entidade
 {
-    internal class Mochila
+    public class Mochila
     {
         #region Geracao de ID
         int _field1;
@@ -38,11 +38,13 @@ namespace AlgoritmoMochila.Entidade
 
         public int Id { get; }
         public int Capacidade { get; }
+        
 
         public Boolean IsCheia => this.PesoMochila >= this.Capacidade;
         public int PesoMochila => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.Peso);
         public int BeneficioMochila => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.Beneficio);
         public Double FuncaoObjetiva => this.Objetos.FindAll(o => o.Quantidade > 0).Sum(o => o.FuncaoObjetiva);
+
 
         public List<Objeto> Objetos
         {
@@ -64,6 +66,7 @@ namespace AlgoritmoMochila.Entidade
 
         public void MostrarMochila()
         {
+            Console.WriteLine($" ");
             Console.WriteLine($"Capacidade da Mochila: {this.PesoMochila}/{this.Capacidade}");
             Console.WriteLine($"Beneficio da Mochila: {this.BeneficioMochila  }");
             Console.WriteLine($"Funcao(Qualidade): {this.FuncaoObjetiva }");

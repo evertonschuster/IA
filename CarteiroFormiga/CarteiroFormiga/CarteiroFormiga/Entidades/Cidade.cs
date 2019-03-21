@@ -9,26 +9,49 @@ namespace CarteiroFormiga.Entidades
     class Cidade
     {
 
+        #region Cidade
+
+        private static List<Cidade> Cidades = new List<Cidade>();
+
+        public static void ResetRotas()
+        {
+            foreach (var item in Cidade.Cidades)
+            {
+                item.IsVisitado = false;
+            }
+        }
+
+        private static void AddCidade(Cidade cidade)
+        {
+            Cidade.Cidades.Add(cidade);
+        }
+
+        public static Cidade GetCidadeById(string key)
+        {
+            return Cidade.Cidades.Find(c => c.Id == key);
+        }
+
+        public static Boolean HasAllVisitadas()
+        {
+            return !Cidade.Cidades.Exists(c => c.IsVisitado == false);
+        }
+
+        public static List<Cidade> GetCidade()
+        {
+            return Cidade.Cidades;
+        }
+
+        #endregion
+
         public String Id { get; }
-        private List<Rota> Rotas{ get;  set; }
-        public Boolean IsVisitado { get; private set; }
+        public Boolean IsVisitado { get; set; }
 
         public Cidade(string id)
         {
             this.Id = id.ToUpper();
+            Cidade.AddCidade(this);
         }
 
-        public void AddRota(Rota rota)
-        {
-            //nao pode adicionar a mesma cidada
-            if( this.Rotas.Exists(r => r.Cidade.Id == rota.Cidade.Id))
-            {
-                throw new RotaRepetidaException(rota);
-            }
-
-            this.Rotas.Add(rota);
-        }
-
-        public List<Rota> GetRota => this.Rotas.ToList();
+        public List<Rota> GetRota => Rota.GetRota(this);
     }
 }
