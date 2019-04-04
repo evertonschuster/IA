@@ -9,9 +9,10 @@ namespace OpenCVSharp
         {
             var detectedFaceGrayImage = new Mat();
             var grayImage = new Mat();
-            var srcImage = new Mat(@"..\..\Images\Test.jpg");
+            var srcImage = new Mat();
             var cascade = new CascadeClassifier(@"..\..\Data\haarcascade_frontalface_alt.xml");
             var nestedCascade = new CascadeClassifier(@"..\..\Data\haarcascade_eye_tree_eyeglasses.xml");
+            var smile = new CascadeClassifier(@"..\..\Data\haarcascade_smile.xml");
 
             VideoCapture video = new VideoCapture(0);
 
@@ -35,7 +36,6 @@ namespace OpenCVSharp
                     var detectedFaceImage = new Mat(srcImage, faceRect);
                     Cv2.Rectangle(srcImage, faceRect, Scalar.Red, 2);
 
-                    Cv2.CvtColor(detectedFaceImage, detectedFaceGrayImage, ColorConversionCodes.BGRA2GRAY);
                     var nestedObjects = nestedCascade.DetectMultiScale(
                         image: grayImage,
                         scaleFactor: 1.1,
@@ -48,7 +48,23 @@ namespace OpenCVSharp
                     {
                         Cv2.Rectangle(srcImage, nestedObject, Scalar.YellowGreen, 2);
                     }
+
+                    var nestedSmile = smile.DetectMultiScale(
+                        image: grayImage,
+                        scaleFactor: 3.1,
+                        minNeighbors: 2,
+                        flags: HaarDetectionType.DoRoughSearch | HaarDetectionType.ScaleImage,
+                        minSize: new Size(30, 30)
+                        );
+
+                    foreach (var nestedObject in nestedSmile)
+                    {
+                        Cv2.Rectangle(srcImage, nestedObject, Scalar.Green, 2);
+                    }
+
                 }
+
+
 
                 Cv2.ImShow("tela", srcImage);
                 Cv2.WaitKey(1); // do events
